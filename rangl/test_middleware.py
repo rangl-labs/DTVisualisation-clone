@@ -117,8 +117,8 @@ local39BldgGasUse = []
 local39BldgEmissions = []
 local39BldgFinishingYears = np.full((39,4), target_year + 1)
 
-maxNumBldgUK = 830000
-aveEVchargingPointPowerMW = 0.05 # 50 kW = 0.05 Mega Wats
+maxNumBldgUK = 25000000.0 # According to https://www.statista.com/statistics/232302/number-of-dwellings-in-england/ there are approx. 25 million homes in the UK, as discussed in https://github.com/moriartyjm/DTVisualisation/issues/27#issuecomment-1115952033
+aveEVchargingPointPowerMW = 0.0072 # 7.2 kW = 0.0072 Mega Wats, as discussed in https://github.com/moriartyjm/DTVisualisation/issues/27#issuecomment-1120257736
 techSummary = np.zeros((8,total_years))
 
 while not done:
@@ -177,6 +177,10 @@ aveEER_UKareaID = np.array(aveEER_UKareaID)
 aveElecUse_UKareaID = np.array(aveElecUse_UKareaID)
 aveGasUse_UKareaID = np.array(aveGasUse_UKareaID)
 aveEmissions_UKareaID = np.array(aveEmissions_UKareaID)
+aveEER_UKareaID_BestVal = np.amax(aveEER_UKareaID, axis=0)
+aveElecUse_UKareaID_BestVal = np.amin(aveElecUse_UKareaID, axis=0)
+aveGasUse_UKareaID_BestVal = np.amin(aveGasUse_UKareaID, axis=0)
+aveEmissions_UKareaID_BestVal = np.amin(aveEmissions_UKareaID, axis=0)
 aveEER_UKareaID = ((aveEER_UKareaID - np.amin(aveEER_UKareaID, axis=0))/np.ptp(aveEER_UKareaID, axis=0)).T
 aveElecUse_UKareaID = ((aveElecUse_UKareaID - np.amin(aveElecUse_UKareaID, axis=0))/np.ptp(aveElecUse_UKareaID, axis=0)).T
 aveGasUse_UKareaID = ((aveGasUse_UKareaID - np.amin(aveGasUse_UKareaID, axis=0))/np.ptp(aveGasUse_UKareaID, axis=0)).T
@@ -190,6 +194,10 @@ aveEER_ManAreaID = np.array(aveEER_ManAreaID)
 aveElecUse_ManAreaID = np.array(aveElecUse_ManAreaID)
 aveGasUse_ManAreaID = np.array(aveGasUse_ManAreaID)
 aveEmissions_ManAreaID = np.array(aveEmissions_ManAreaID)
+aveEER_ManAreaID_BestVal = np.amax(aveEER_ManAreaID, axis=0)
+aveElecUse_ManAreaID_BestVal = np.amin(aveElecUse_ManAreaID, axis=0)
+aveGasUse_ManAreaID_BestVal = np.amin(aveGasUse_ManAreaID, axis=0)
+aveEmissions_ManAreaID_BestVal = np.amin(aveEmissions_ManAreaID, axis=0)
 aveEER_ManAreaID = ((aveEER_ManAreaID - np.amin(aveEER_ManAreaID, axis=0))/np.ptp(aveEER_ManAreaID, axis=0)).T
 aveElecUse_ManAreaID = ((aveElecUse_ManAreaID - np.amin(aveElecUse_ManAreaID, axis=0))/np.ptp(aveElecUse_ManAreaID, axis=0)).T
 aveGasUse_ManAreaID = ((aveGasUse_ManAreaID - np.amin(aveGasUse_ManAreaID, axis=0))/np.ptp(aveGasUse_ManAreaID, axis=0)).T
@@ -199,6 +207,10 @@ local39BldgEER = np.array(local39BldgEER).T
 local39BldgElecUse = np.array(local39BldgElecUse).T
 local39BldgGasUse = np.array(local39BldgGasUse).T
 local39BldgEmissions = np.array(local39BldgEmissions).T
+local39BldgEER_BestVal = np.amax(local39BldgEER, axis=1)
+local39BldgElecUse_BestVal = np.amin(local39BldgElecUse, axis=1)
+local39BldgGasUse_BestVal = np.amin(local39BldgGasUse, axis=1)
+local39BldgEmissions_BestVal = np.amin(local39BldgEmissions, axis=1)
 
 local39Bldg = np.array(list(zip(local39BldgEER, local39BldgElecUse, local39BldgGasUse, local39BldgEmissions))).reshape(local39BldgEER.shape[0],local39BldgEER.shape[1],4)
 
@@ -243,28 +255,28 @@ pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'),
                 '../Visualization_Data/MiddlewareGeneratedOutputs/UK/Emission/UK-Emission-' + ''.join(policy_configs) + '.csv', index=False)
 
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(avePctPump_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(avePctPump_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/HP/Manchester-HP-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(avePctSolar_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(avePctSolar_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Solar/Manchester-Solar-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(avePctInsulation_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(avePctInsulation_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Insulation/Manchester-Insulation-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(avePctEV_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(avePctEV_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/EV/Manchester-EV-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(aveEER_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(aveEER_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/EER/Manchester-EER-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(aveElecUse_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(aveElecUse_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Elec/Manchester-Elec-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(aveGasUse_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(aveGasUse_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Gas/Manchester-Gas-' + ''.join(policy_configs) + '.csv', index=False)
 pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
-            pd.DataFrame(aveEmissions_UKareaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
+            pd.DataFrame(aveEmissions_ManAreaID, columns = np.arange(2022,target_year+1))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Emission/Manchester-Emission-' + ''.join(policy_configs) + '.csv', index=False)
 
 pd.concat([pd.Series(np.array(['Solar1','Solar2','HP1','HP2','EV1','EV2','Insulation1','Insulation2']), name = 'TechID'), 
@@ -281,4 +293,55 @@ pd.concat([pd.Series(np.arange(39)+1, name = 'BuildingID'),
             pd.DataFrame(local39BldgFinishingYears, 
                          columns = np.array(['HP', 'Solar', 'Insulation', 'EV']))], axis=1).to_csv(
                 '../Visualization_Data/MiddlewareGeneratedOutputs/LocalView/Technology/LocalView-' + ''.join(policy_configs) + '.csv', index=False)
+
+
+# pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'), 
+#            pd.Series(aveEER_UKareaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/UK/EER/UK-EER-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'), 
+#            pd.Series(aveElecUse_UKareaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/UK/Elec/UK-Elec-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'), 
+#            pd.Series(aveGasUse_UKareaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/UK/Gas/UK-Gas-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'), 
+#            pd.Series(aveEmissions_UKareaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/UK/Emission/UK-Emission-BestValue.csv', index=False)
+pd.concat([pd.Series(np.arange(374)+1, name = 'AreaID'), 
+           pd.DataFrame(np.vstack((aveEER_UKareaID_BestVal, 
+                                   aveElecUse_UKareaID_BestVal, 
+                                   aveGasUse_UKareaID_BestVal, 
+                                   aveEmissions_UKareaID_BestVal)).T, 
+                        columns = np.array(['Max EER', 'Min Elec', 'Min Gas', 'Min Emissions']))], axis=1).to_csv(
+                '../Visualization_Data/MiddlewareGeneratedOutputs/UK/UK-BestValue.csv', index=False)
+
+
+# pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
+#            pd.Series(aveEER_ManAreaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/EER/Manchester-EER-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
+#            pd.Series(aveElecUse_ManAreaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Elec/Manchester-Elec-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
+#            pd.Series(aveGasUse_ManAreaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Gas/Manchester-Gas-BestValue.csv', index=False)
+# pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
+#            pd.Series(aveEmissions_ManAreaID_BestVal, name = 'Best Value (Max for EER; Min for Elec/Gas/Emissions)')], axis=1).to_csv(
+#                 '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Emission/Manchester-Emission-BestValue.csv', index=False)
+pd.concat([pd.Series(np.arange(282)+1, name = 'AreaID'), 
+           pd.DataFrame(np.vstack((aveEER_ManAreaID_BestVal, 
+                                   aveElecUse_ManAreaID_BestVal, 
+                                   aveGasUse_ManAreaID_BestVal, 
+                                   aveEmissions_ManAreaID_BestVal)).T, 
+                        columns = np.array(['Max EER', 'Min Elec', 'Min Gas', 'Min Emissions']))], axis=1).to_csv(
+                '../Visualization_Data/MiddlewareGeneratedOutputs/Manchester/Manchester-BestValue.csv', index=False)
+
+
+pd.concat([pd.Series(np.arange(39)+1, name = 'BuildingID'), 
+           pd.DataFrame(np.vstack((local39BldgEER_BestVal, 
+                                   local39BldgElecUse_BestVal, 
+                                   local39BldgGasUse_BestVal, 
+                                   local39BldgEmissions_BestVal)).T, 
+                        columns = np.array(['Max EER', 'Min Elec', 'Min Gas', 'Min Emissions']))], axis=1).to_csv(
+                '../Visualization_Data/MiddlewareGeneratedOutputs/LocalView/Metrics/LocalView-BestValue.csv', index=False)
 

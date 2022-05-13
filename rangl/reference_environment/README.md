@@ -1,6 +1,6 @@
 # A guide to the RangL environment (in OpenAI Gym)
 
-This folder contains a copy of the RangL environment which will be used for modeling the NBM output data. It can be used right away to train an agent. However to gain an advantage in the competition, you can consider training your agent in a modified environment (although evaluation will still use this original environment!). 
+This folder contains a copy of the RangL environment which is used by the middleware to simulate year-by-year installations of the 4 technologies (Heat pumps, Solar PV, External wall Insulation, EV charge points).
 
 The RangL environment is designed to be easily modified and has the following modular structure:
 
@@ -16,7 +16,7 @@ Any modifications should be made to the Helpers (updating the dependencies as ne
 
 The Helper classes are:
 
-* Parameters -- contains all challenge-specific parameters
+* Parameters -- contains all NBM-specific parameters
 * State -- contains all state information and provides the following methods:
     * initialise_state
     * reset
