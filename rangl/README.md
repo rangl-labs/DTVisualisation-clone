@@ -4,6 +4,8 @@ The middleware converts policy configurations of (thermal comfort, mass electrif
 
 The middleware then maps the buildings in NBM data to 3 visualization levels: UK, Manchester, Local street, and calculates the relevant metrics and averages year-by-year, and finally outputs the calculations to plain .csv files.
 
+Full documentation is available [here](https://github.com/rangl-labs/DTVisualisation-clone/issues/1#issue-1212475703).
+
 ## The RangL environment
 
 RangL uses the [Openai Gym framework](https://gym.openai.com). To install the RangL environment on your local machine, 
